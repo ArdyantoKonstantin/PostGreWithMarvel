@@ -30,8 +30,6 @@ namespace PostGreWithMarvel.Controllers
         {
             var response = await _mediator.Send(model);
             return Ok(response);
-            //var res = await _db.Users.FirstOrDefaultAsync(Queryable => Queryable.SearchVector.Matches(name));
-            //return Ok(new normal = res);
         }
 
         [HttpPost("/register-user")]

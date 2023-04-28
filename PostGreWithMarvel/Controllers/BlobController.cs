@@ -30,6 +30,13 @@ namespace PostGreWithMarvel.Controllers
             return Ok(urlFile);
         }
 
+        [HttpGet("redirect")]
+        public async Task<ActionResult<string>> GetPresignedUrlRedirect(string fileName)
+        {
+            var urlFile = await _storageProvider.GetPresignedUrl(fileName);
+            return Redirect(urlFile);
+        }
+
         [HttpGet("presigned-put-object")]
         public async Task<ActionResult<string>> GetPutPresignedUrl(string fileName)
         {

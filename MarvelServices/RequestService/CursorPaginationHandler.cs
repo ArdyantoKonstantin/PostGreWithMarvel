@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,12 +30,17 @@ namespace MarvelServices.RequestService
                 query = query.OrderByDescending(Q => Q.Id).Where(Q => Q.Id < request.PrevId);
             
             }
-            var result = await query.Take(request.Limit).AsNoTracking().Select(Q => new CursorPaginationModel()
-            {
-                Email = Q.Email,
-                Id = Q.Id,
-                Name = Q.Name
-            }).ToListAsync();
+            var result = await (from u in _db.Users
+                                join b in _db.Blobs
+                                on u.BlobId equals b.BlobId
+                                select new CursorPaginationModel()
+                                {
+                                    Email = u.Email,
+                                    Id = u.Id,
+                                    Name = u.Name,
+                                    BlobId = b.BlobId,
+                                    FileUrl = b.FileName
+                                }).AsNoTracking().ToListAsync();
             result = result.OrderBy(Q => Q.Id).ToList();
             var nextCursorId = result.LastOrDefault()?.Id;
             var prevCursorId = result.FirstOrDefault()?.Id;

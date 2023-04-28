@@ -30,6 +30,12 @@ namespace MarvelEntity.Entity
                     "english",
                     p => new { p.Name }
                     ).HasIndex(p => p.SearchVector).HasMethod("GIN");
+
+                entity.HasOne(e => e.Blob)
+                .WithMany(e => e.ListOfUsers)
+                .HasForeignKey(e => e.BlobId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("u__blob_id_fkey");
             });
 
             modelBuilder.Entity<Blob>(entity =>

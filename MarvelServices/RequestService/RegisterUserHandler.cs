@@ -25,7 +25,8 @@ namespace MarvelServices.RequestService
             {
                 Name = model.Username,
                 Email = model.Email,
-                Password = model.Password
+                Password = model.Password,
+                BlobId = model.BlobId
             };
             _db.Users.Add(newUser);
             try

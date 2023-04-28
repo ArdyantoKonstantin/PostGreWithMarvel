@@ -11,7 +11,7 @@ namespace MarvelEntity.Entity
         public Guid BlobId { get; set; }
         public string? FileName { get; set; }
         public string? FilePath { get; set; }
-
+        public List<User> ListOfUsers { get; set; } = new List<User>();
         public string? MIME { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
     }
