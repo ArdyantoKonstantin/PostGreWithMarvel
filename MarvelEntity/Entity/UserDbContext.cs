@@ -12,6 +12,7 @@ namespace MarvelEntity.Entity
         public UserDbContext(DbContextOptions<UserDbContext> options) : base(options) { }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Address> Address { get; set; }
+        public virtual DbSet<Blob> Blobs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +30,12 @@ namespace MarvelEntity.Entity
                     "english",
                     p => new { p.Name }
                     ).HasIndex(p => p.SearchVector).HasMethod("GIN");
+            });
+
+            modelBuilder.Entity<Blob>(entity =>
+            {
+                entity.HasKey(e => e.BlobId)
+                .HasName("blob_pkey");
             });
 
         }

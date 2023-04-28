@@ -2,6 +2,9 @@ using MarvelContract.RequestModel;
 using MarvelEntity.Entity;
 using MarvelServices.RequestService;
 using Microsoft.EntityFrameworkCore;
+using PostGreWithMarvel.Interface;
+using PostGreWithMarvel.Services;
+using PostGreWithMarvel.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,10 +17,14 @@ builder.Services.AddSwaggerGen();
 
 var connString = builder.Configuration.GetConnectionString("UserDB");
 
+builder.Services.Configure<MinIoOptions>(builder.Configuration.GetSection("MinIO"));
+
 builder.Services.AddDbContext<UserDbContext>(dbcontextBuilder =>
 {
     dbcontextBuilder.UseNpgsql(connString).UseSnakeCaseNamingConvention();
 });
+
+builder.Services.AddSingleton<IStorageProvider, MinioService>();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetUserHandler).Assembly));
 var app = builder.Build();
